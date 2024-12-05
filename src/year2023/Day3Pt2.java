@@ -1,4 +1,4 @@
-package solutions;
+package year2023;
 
 import java.io.BufferedReader;
 import java.io.File;
