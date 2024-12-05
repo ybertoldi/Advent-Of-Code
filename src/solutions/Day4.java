@@ -53,22 +53,19 @@ public class Day4 {
 		}
 
 		HashMap<String, Integer> cardsObtained = new HashMap<String, Integer>();
-		cardsObtained.put("211", 0);
-		int count = cardsToSearch.size();
+		int count = 211;
 
 		while (cardsToSearch.size() > 0) {
 			String curCard = cardsToSearch.get(cardsToSearch.size() - 1);
 
 			int tempCounter = cardWins.get(curCard).size();
 			for (String card : cardWins.get(curCard)) {
-				if (Integer.valueOf(card) < 211) {
-					tempCounter += cardsObtained.get(card);
-				}
+				tempCounter += cardsObtained.get(card);
 			}
 			cardsObtained.put(curCard, tempCounter);
 			count += tempCounter;
-			System.out
-					.println("card " + curCard + " wins " + tempCounter + " other cards  -  " + cardWins.get(curCard));
+			System.out.println(
+					"card " + curCard + " wins " + tempCounter + " other cards  -  " + cardWins.get(curCard));
 
 			cardsToSearch.remove(cardsToSearch.size() - 1);
 
@@ -112,11 +109,16 @@ public class Day4 {
 
 			testCardToSearch.remove(testCardToSearch.size() - 1);
 
-			System.out.println("num of cards: " + count);
-
 		}
 
 		System.out.println("test cards: " + testCounter);
 
+		int differentCounter = 211;
+		for (int val : cardsObtained.values()) {
+			differentCounter += val;
+		}
+		
+		System.out.println("txt cards: " + count);
+		System.out.println("txt cards: " + differentCounter);
 	}
 }
