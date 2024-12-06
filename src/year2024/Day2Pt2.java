@@ -1,5 +1,6 @@
 package year2024;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Day2Pt2 {
@@ -317,77 +318,85 @@ public class Day2Pt2 {
 		String[] lines = input.split("\r\n");
 		int count = 0;
 		int k = 0;
+
+		System.out.println(count);
+
 		for (String line : lines) {
-			String[] vals = line.split(" ");
-			k++;
-			System.out.println(k);
-			int validation = isValid(vals);
-			
-			
-			if (validation == 1) {
+			ArrayList<Integer> arrayInt = convertLineToIntegerList(line);
+
+			if (levelVerifyInt(arrayInt)) {
+				count++;
+			} else if (newSafeLine(arrayInt)) {
 				count++;
 			}
-			else {
-				 
-			}
-			
 		}
-		
-		System.out.println(count);
-		
+
+		System.out.println("Total de linhas seguras: " + count);
 	}
-	
-	static int[] isValid(String[] vals) {
-		boolean isValid = true;
-		int variation = Integer.valueOf(vals[1]) - Integer.valueOf(vals[0]);
-			for (int i = 0; i < vals.length - 1; i++) {
-				int curVariation = Integer.valueOf(vals[i + 1]) - Integer.valueOf(vals[i]);
-				
-				if (Math.abs(curVariation) <= 3 && curVariation != 0 && variation != 0) {
-					if ((curVariation / Math.abs(curVariation) == variation / Math.abs(variation))) {
-						variation = curVariation;
-					} else {
-						return new int[] {2, i};
-					}
-				} else {
-					return new int[] {3, i};
+
+	public static ArrayList<Integer> convertLineToIntegerList(String line) {
+		String[] parts = line.split(" ");
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (String part : parts) {
+			numbers.add(Integer.parseInt(part));
+		}
+		return numbers;
+	}
+
+	public static boolean newSafeLine(ArrayList<Integer> arrayInt) {
+		for (int i = 0; i < arrayInt.size(); i++) {
+			ArrayList<Integer> tempList = new ArrayList<>(arrayInt);
+			tempList.remove(i);
+
+			if (levelVerifyInt(tempList)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean levelVerifyInt(ArrayList<Integer> arrayLine) {
+		boolean sit = true;
+
+		boolean increase = false;
+		boolean decrease = false;
+
+		int dif = 1;
+
+		for (int i = 0; i < arrayLine.size(); i++) {
+			if (i < arrayLine.size() - 1) {
+				dif = Integer.valueOf(arrayLine.get(i)) - Integer.valueOf(arrayLine.get(i + 1));
+
+				if (dif > 3 || dif < -3 || dif == 0) {
+					sit = false;
+					break;
+				}
+
+				if (dif == 0) {
+					sit = false;
+				} else if (dif < 0) {
+					decrease = true;
+				} else if (dif > 0) {
+					increase = true;
 				}
 			}
 
-			return isValid;
-	}
-	
-	static String[] removeError(String[] vals) {
-		String[] arr = new String[vals.length -1];
-		int j = 0;
-		boolean hasChanged = false;
-		
-		int variation = Integer.valueOf(vals[1]) - Integer.valueOf(vals[0]);
-		for (int i = 0; i < vals.length - 1 && j <= arr.length ; i++) {
-			if (!hasChanged) {
-				int curVariation = Integer.valueOf(vals[i + 1]) - Integer.valueOf(vals[i]);
-				if (Math.abs(curVariation) <= 3 && curVariation != 0 && variation != 0) {
-					if ((curVariation / Math.abs(curVariation) == variation / Math.abs(variation))) {
-						variation = curVariation;
-						arr[i] = vals[j];
-						j++;
-					} else {
-						hasChanged = true;
-						arr[i] = vals[j];
-						j += 2;
-					}
-				} else {
-					hasChanged = true;
-					arr[i] = vals[j];
-					j+= 2;
+			if (dif > 3 || dif < -3 || dif == 0) {
+				sit = false;
+				break;
+			}
+
+			if (i == arrayLine.size() - 1) {
+				if (increase && decrease) {
+					sit = false;
 				}
 			}
-			else {
-				arr[i] = vals[j];
-				j++;
-			}
+
 		}
-		
-		return arr;
+		if (!sit) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

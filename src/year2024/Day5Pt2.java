@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Day5Pt1 {
+import classes.Day5Comparator;
+
+public class Day5Pt2 {
 	public static void main(String[] args) throws IOException {
 		File file = new File(
 				"C:\\Users\\Yuri\\OneDrive\\Área de Trabalho\\advent of code\\src\\resources\\printQueue.txt");
@@ -43,11 +46,12 @@ public class Day5Pt1 {
 
 		int counter = 0;
 		for (String line : lines) {
-			List<String> vals = Arrays.asList(line.split(","));
+			List<String> vals =  new LinkedList<String>(Arrays.asList(line.split(",")));
 			
 			boolean valid = true;
 			for (int i = 0; i < vals.size(); i++) {
 				String val = vals.get(i);
+				boolean canBreak = false;
 				if (!numToList.containsKey(val)) {
 					continue;
 				}
@@ -55,16 +59,59 @@ public class Day5Pt1 {
 				for (String s : numToList.get(val)) {
 					if (vals.contains(s) && vals.indexOf(s) < i) {
 						valid = false;
+						canBreak = true;
 						break;
 					}
 				}
+				
+				if (canBreak) {
+					break;
+				}
 			}
 
-			if (valid) {
+			if (!valid) {
+				System.out.println(vals);
+				sortList(vals, numToList);
 				counter += Integer.valueOf(vals.get(vals.size() / 2));
 			}
 		}
 
 		System.out.println(counter);
+	}
+	
+	static void sortList(List<String> vals, HashMap<String, List<String>> data) {
+			int i = vals.size() -1;
+			List<String> verifiedNums = new ArrayList<String>();
+			
+			while (i >= 0) {
+				String cur = vals.get(i);
+				int curI = i;
+				
+				if (verifiedNums.contains(cur)) {
+					i--;
+					continue;
+				}
+				
+				if (!data.containsKey(cur)) {
+					i--;
+					continue;}
+				
+				List<String> compareList = data.get(cur);
+				for (int j = i - 1; j >= 0; j--) {
+					
+					if (compareList.contains(vals.get(j)) && j < curI) {
+						String changedVal = vals.remove(j);
+						vals.add(curI , changedVal);
+						curI--;
+						
+						System.out.println(vals + " " + cur + " comes before " + changedVal);
+					}
+				}
+				verifiedNums.add(cur);
+			}
+		
+
+		
+		
 	}
 }
