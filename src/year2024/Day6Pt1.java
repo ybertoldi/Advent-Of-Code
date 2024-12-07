@@ -55,6 +55,7 @@ public class Day6Pt1 {
 				}
 				matriz[gPos[0]][gPos[1]] = curFig; 
 			}
+			
 		}
 		
 		System.out.println(counter);
