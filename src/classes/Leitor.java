@@ -48,7 +48,23 @@ public class Leitor {
 	public static void printaMatriz(char[][] matriz) {
 		for(int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
-				System.out.print(matriz[i][j]);
+				char c = matriz[i][j];
+				
+				if (c == 'X') {
+					System.out.print("\u001B[41m" + "." + "\u001B[0m");
+				}
+				
+				else if (c == '#') {
+					System.out.print("\u001B[33m" + c + "\u001B[0m");
+				}
+				
+				else if (c == '.') {
+					System.out.print(c);
+				}
+				else {
+					System.out.print("\u001B[32m" + c + "\u001B[0m");
+				}
+				
 			}
 			System.out.println();
 		}
