@@ -1,6 +1,6 @@
-/bin/
-input.txt
-
-# ignorar todos os arquivos sem extensao
 *
-!*.*
+!*/
+!*.* 
+
+*input.txt
+/bin/
